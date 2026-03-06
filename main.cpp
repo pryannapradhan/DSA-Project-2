@@ -13,6 +13,15 @@ struct Restaurant {
     string address;
     float latitude;
     float longitude;
+
+    void display() {
+        cout << "Title: " << title << endl;
+        cout << "Category: " << category << endl;
+        cout << "Rating: " << rating << endl;
+        cout << "Address: " << address << endl;
+        cout << "Latitude: " << latitude << endl;
+        cout << "Longitude: " << longitude << endl;
+    }
 };
 
 vector<Restaurant> load_file(string file_name) {
@@ -27,24 +36,26 @@ vector<Restaurant> load_file(string file_name) {
 
     getline(restaurant_file, line);
 
+    int line_count = 0;
     while (getline(restaurant_file, line)) {
+        line_count++;
         stringstream ss(line);
         string temp;
         Restaurant rest;
 
-        // note: using "|" as delimiter since the addresses had commas in them
-        getline(ss, rest.title, '|');
-        getline(ss, rest.category, '|');
+        // note: using "\t" as delimiter since the addresses had commas in them
+        getline(ss, rest.title, '\t');
+        getline(ss, rest.category, '\t');
 
-        getline(ss, temp, '|');
+        getline(ss, temp, '\t');
         rest.rating = stof(temp);
 
-        getline(ss, rest.address, '|');
+        getline(ss, rest.address, '\t');
 
-        getline(ss, temp, '|');
-        rest.latitude= stof(temp);
-        getline(ss, temp, '|');
-        rest.longitude= stof(temp);
+        getline(ss, temp, '\t');
+        rest.latitude = stof(temp);
+        getline(ss, temp, '\t');
+        rest.longitude = stof(temp);
 
         restaurants.push_back(rest);
     }
@@ -75,11 +86,18 @@ int main() {
         return 0;
     }
 
-    // load in data somehow
-
     cout << "Amazing, let us begin!\n\n";
 
-    cout << "What category would you like to sort by? Please enter a number 1-3.\n";
+    // load in data somehow
+        vector<Restaurant> restaurant_data = load_file("C:/Users/klian/CLionProjects/DSA-Project-2/150K_Restaurants_Cleaned.csv");
+
+    cout << "Here is a the format of the data:\n";
+    for (int i = 0; i < 3; i++) {
+        restaurant_data [i].display();
+        cout << endl;
+    }
+
+    cout << "\nWhat category would you like to sort by? Please enter a number 1-3.\n";
     cout << "1. Restaurant Name\n";
     cout << "2. Rating\n";
     cout << "3. Distance\n";
