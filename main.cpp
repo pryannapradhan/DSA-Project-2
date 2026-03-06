@@ -22,6 +22,8 @@ int main() {
         return 0;
     }
 
+    // load in data somehow
+
     cout << "Amazing, let us begin!\n\n";
 
     cout << "What category would you like to sort by? Please enter a number 1-3.\n";
