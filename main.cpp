@@ -1,25 +1,66 @@
 #include <iostream>
+using namespace std;
 
-// TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 int main() {
-    // TIP Press <shortcut actionId="RenameElement"/> when your caret is at the
-    // <b>lang</b> variable name to see how CLion can help you rename it.
-    auto lang = "C++";
-    std::cout << "Hello and welcome to " << lang << "!\n";
+    int answer;
+    string category;
+    float latitude;
+    float longitude;
 
-    for (int i = 1; i <= 5; i++) {
-        // TIP Press <shortcut actionId="Debug"/> to start debugging your code.
-        // We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/>
-        // breakpoint for you, but you can always add more by pressing
-        // <shortcut actionId="ToggleLineBreakpoint"/>.
-        std::cout << "i = " << i << std::endl;
+    cout << "-----------------------\n";
+    cout << "     ARE U HUNGRY?     \n";
+    cout << "-----------------------\n";
+
+    cout << "Are you ready to start? Please enter 1 or 2.\n";
+    cout << "1. yes\n";
+    cout << "2. no\n";
+
+    cin >> answer;
+
+    if (answer == 2) {
+        cout << "No worries! See you next time!\n";
+        return 0;
+    }
+
+    // load in data somehow
+
+    cout << "Amazing, let us begin!\n\n";
+
+    cout << "What category would you like to sort by? Please enter a number 1-3.\n";
+    cout << "1. Restaurant Name\n";
+    cout << "2. Rating\n";
+    cout << "3. Distance\n";
+
+    cin >> answer;
+
+    if (answer == 1) {
+        category = "name";
+    }
+    else if (answer == 2) category = "rating";
+    else if (answer == 3) {
+        category = "distance";
+
+        cout << "Please enter your latitude:\n";
+        cin >> latitude;
+
+        cout << "Please enter your longitude:\n";
+        cin >> longitude;
+    }
+
+    cout << "Sorting by " << category << "!\n\n";
+
+    cout << "Which algorithm would you like to sort by? Please enter 1 or 2.\n";
+    cout << "1. Heap Sort\n";
+    cout << "2. Merge Sort\n";
+
+    cin >> answer;
+
+    if (answer == 1) {
+        cout << "Calling heap sort\n"; //replace later with heap sort algorithm
+    }
+    else if (answer == 2) {
+        cout << "Calling merge sort\n"; //replace later with merge sort algorithm
     }
 
     return 0;
 }
-
-// TIP See CLion help at <a
-// href="https://www.jetbrains.com/help/clion/">jetbrains.com/help/clion/</a>.
-//  Also, you can try interactive lessons for CLion by selecting
-//  'Help | Learn IDE Features' from the main menu.
