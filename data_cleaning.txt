@@ -1,0 +1,36 @@
+import pandas as pd
+
+# load dataset
+df = pd.read_csv('380K_US_Restaurants.csv')
+
+# choose columns of interest
+important_cols = ['Title', 'Category', 'Rating', 'Address', 'Latitude', 'Longitude']
+
+# filter original data frame
+df_filtered = df[important_cols]
+
+# drop instances with null values
+df_filtered_no_null = df_filtered.dropna()
+
+# convert cols from object -> float
+df_filtered_no_null = df_filtered_no_null[df_filtered_no_null['Rating'] != 'Rating']
+df_filtered_no_null['Rating'] = df_filtered_no_null['Rating'].astype(float)
+
+df_filtered_no_null = df_filtered_no_null[df_filtered_no_null['Latitude'] != 'Latitude']
+df_filtered_no_null['Latitude'] = df_filtered_no_null['Latitude'].astype(float)
+
+df_filtered_no_null = df_filtered_no_null[df_filtered_no_null['Longitude'] != 'Longitude']
+df_filtered_no_null['Longitude'] = df_filtered_no_null['Longitude'].astype(float)
+
+# sample only 100,000 points
+df_filtered_no_null_sample = df_filtered_no_null.sample(n=150000, random_state=123)
+
+# basic check
+df_filtered_no_null_sample.info()
+print(df_filtered_no_null_sample.head())
+print(df_filtered_no_null_sample.tail())
+
+# save to csv file
+df_filtered_no_null_sample.to_csv('150K_Restaurants_Cleaned.csv', index=False, sep='\t')
+
+
