@@ -1,5 +1,58 @@
 #include <iostream>
+#include <vector>
+#include <fstream>
+#include <sstream>
+
 using namespace std;
+
+// create restaurant struct to read in csv file data
+struct Restaurant {
+    string title;
+    string category;
+    float rating;
+    string address;
+    float latitude;
+    float longitude;
+};
+
+vector<Restaurant> load_file(string file_name) {
+    vector<Restaurant> restaurants;
+    ifstream restaurant_file(file_name);
+    string line;
+
+    if (!restaurant_file.is_open()) {
+        cout << "File could not be opened\n";
+        return restaurants;
+    }
+
+    getline(restaurant_file, line);
+
+    while (getline(restaurant_file, line)) {
+        stringstream ss(line);
+        string temp;
+        Restaurant rest;
+
+        // note: using "|" as delimiter since the addresses had commas in them
+        getline(ss, rest.title, '|');
+        getline(ss, rest.category, '|');
+
+        getline(ss, temp, '|');
+        rest.rating = stof(temp);
+
+        getline(ss, rest.address, '|');
+
+        getline(ss, temp, '|');
+        rest.latitude= stof(temp);
+        getline(ss, temp, '|');
+        rest.longitude= stof(temp);
+
+        restaurants.push_back(rest);
+    }
+
+    restaurant_file.close();
+    return restaurants;
+}
+
 
 int main() {
     int answer;

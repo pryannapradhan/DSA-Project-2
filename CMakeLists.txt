@@ -5,4 +5,5 @@ set(CMAKE_CXX_STANDARD 14)
 
 add_executable(DSAProject2 main.cpp
         sort_merge.cpp
-        sort_heap.cpp)
+        sort_heap.cpp
+)
