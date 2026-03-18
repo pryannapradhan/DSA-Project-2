@@ -7,3 +7,6 @@ add_executable(DSAProject2 main.cpp
         sort_merge.cpp
         sort_heap.cpp
 )
+
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/150K_Restaurants_Cleaned.csv"
+        DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")

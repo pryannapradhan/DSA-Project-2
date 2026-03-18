@@ -13,6 +13,7 @@ struct Restaurant {
     string address;
     float latitude;
     float longitude;
+    float distance = -1.0;
 
     void display() {
         cout << "Title: " << title << endl;
@@ -89,7 +90,7 @@ int main() {
     cout << "Amazing, let us begin!\n\n";
 
     // load in data somehow
-        vector<Restaurant> restaurant_data = load_file("C:/Users/klian/CLionProjects/DSA-Project-2/150K_Restaurants_Cleaned.csv");
+        vector<Restaurant> restaurant_data = load_file("150K_Restaurants_Cleaned.csv");
 
     cout << "Here is a the format of the data:\n";
     for (int i = 0; i < 3; i++) {
