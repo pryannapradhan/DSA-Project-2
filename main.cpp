@@ -54,6 +54,7 @@ vector<Restaurant> load_file(string file_name) {
 int main() {
     int answer;
     string category;
+    int numRecs;
     float latitude;
     float longitude;
 
@@ -110,6 +111,11 @@ int main() {
 
     cout << "Sorting by " << category << "!\n\n";
 
+    cout << "\nHow many restaurants do you want recommended? Please enter a number.\n";
+
+    cin >> numRecs;
+
+
     cout << "Which algorithm would you like to sort by? Please enter 1 or 2.\n";
     cout << "1. Heap Sort\n";
     cout << "2. Merge Sort\n";
@@ -122,16 +128,16 @@ int main() {
     else if (answer == 2) {
         cout << "Calling merge sort\n";
         if (category == "name"){
-            mergeSort(restaurant_data, 0, restaurant_data.size() - 1, "name"); //replace later with merge sort algorithm}
+            mergeSort(restaurant_data, 0, restaurant_data.size() - 1, "name");
         } else if (category == "rating") {
-            mergeSort(restaurant_data, 0, restaurant_data.size() - 1, "rating"); //replace later with merge sort algorithm}
+            mergeSort(restaurant_data, 0, restaurant_data.size() - 1, "rating");
         } else if (category == "distance") {
-            mergeSort(restaurant_data, 0, restaurant_data.size() - 1, "distance"); //replace later with merge sort algorithm}
+            mergeSort(restaurant_data, 0, restaurant_data.size() - 1, "distance");
         }
     }
 
 
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < numRecs; i++) {
         restaurant_data [i].display();
         cout << endl;
     }
