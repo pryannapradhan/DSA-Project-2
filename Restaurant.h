@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <cmath>
 
 using namespace std;
 //
@@ -10,6 +11,11 @@ using namespace std;
 #define RESTAURANT_H
 
 // create restaurant struct to read in csv file data
+
+inline float toRad(float deg) {
+    float rad = deg * (M_PI / 180);
+    return rad;
+}
 
 struct Restaurant {
     string title;
@@ -27,6 +33,22 @@ struct Restaurant {
         cout << "Address: " << address << endl;
         cout << "Latitude: " << latitude << endl;
         cout << "Longitude: " << longitude << endl;
+    }
+
+    void calculateDistance(float lat, float lon) {
+        float latU = toRad(lat);
+        float lonU = toRad(lon);
+        float latR = toRad(latitude);
+        float lonR = toRad(longitude);
+
+        float latD = latR - latU;
+        float lonD = lonR - lonU;
+
+        float factorOne = 2 * 6371.0;
+        float arg = pow(sin(latD / 2),  2) + (cos(latU) * cos(latR) * pow(sin(lonD / 2), 2));
+        float factorTwo = atan2(sqrt(arg), sqrt(1 - arg));
+        this->distance = factorOne * factorTwo;
+
     }
 };
 

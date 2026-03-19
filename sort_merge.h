@@ -7,7 +7,7 @@
 #include <vector>
 #include "Restaurant.h"
 
-void merge(vector<Restaurant>& res, int left, int mid, int right);
-void mergeSort(vector<Restaurant>& res, int left, int right);
+void merge(vector<Restaurant>& res, int left, int mid, int right, string type);
+void mergeSort(vector<Restaurant>& res, int left, int right, string type);
 
 #endif //SORT_MERGE_H

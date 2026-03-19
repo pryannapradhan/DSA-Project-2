@@ -9,7 +9,14 @@ using namespace std;
 // Date: 3.18.2026
 //
 
-void merge(vector<Restaurant>& res, int left, int mid, int right) {
+
+
+void merge(vector<Restaurant>& res, int left, int mid, int right, string type) {
+    bool name = false;
+    bool rating = false;
+    bool distance = false;
+
+
     vector<Restaurant> leftArr = {};
     vector<Restaurant> rightArr = {};
 
@@ -29,16 +36,41 @@ void merge(vector<Restaurant>& res, int left, int mid, int right) {
     int j = 0;
     int k = left;
 
-    //Inserts the entries from each left and right vector based on alphabetical order.
-    while (i < sizeL && j < sizeR) {
-        if (leftArr[i].title <= rightArr[j].title) {
-            res[k] = leftArr[i];
-            i++;
-        } else if (rightArr[j].title <= leftArr[i].title) {
-            res[k] = rightArr[j];
-            j++;
+
+    if (type == "name") {
+        //Inserts the entries from each left and right vector based on alphabetical order.
+        while (i < sizeL && j < sizeR) {
+            if (leftArr[i].title <= rightArr[j].title) {
+                res[k] = leftArr[i];
+                i++;
+            } else if (rightArr[j].title <= leftArr[i].title) {
+                res[k] = rightArr[j];
+                j++;
+            }
+            k++;
         }
-        k++;
+    } else if (type == "rating") {
+        while (i < sizeL && j < sizeR) {
+            if (leftArr[i].rating >= rightArr[j].rating) {
+                res[k] = leftArr[i];
+                i++;
+            } else if (rightArr[j].rating >= leftArr[i].rating) {
+                res[k] = rightArr[j];
+                j++;
+            }
+            k++;
+        }
+    } else if (type == "distance") {
+        while (i < sizeL && j < sizeR) {
+            if (leftArr[i].distance <= rightArr[j].distance) {
+                res[k] = leftArr[i];
+                i++;
+            } else if (rightArr[j].distance <= leftArr[i].distance) {
+                res[k] = rightArr[j];
+                j++;
+            }
+            k++;
+        }
     }
 
     //Inputs leftover values into the sorted vector.
@@ -60,7 +92,7 @@ void merge(vector<Restaurant>& res, int left, int mid, int right) {
     }
 
 
-void mergeSort(vector<Restaurant>& res, int left, int right) {
+void mergeSort(vector<Restaurant>& res, int left, int right, string type) {
 
     //Splits the vector up recursively.
 
@@ -68,10 +100,10 @@ void mergeSort(vector<Restaurant>& res, int left, int right) {
 
         int mid = left + (right - left) / 2;
 
-        mergeSort(res, left, mid);
-        mergeSort(res, mid + 1, right);
+        mergeSort(res, left, mid, type);
+        mergeSort(res, mid + 1, right, type);
 
-        merge(res, left, mid, right);
+        merge(res, left, mid, right, type);
 
 
     }

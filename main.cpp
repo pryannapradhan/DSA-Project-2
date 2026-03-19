@@ -102,6 +102,10 @@ int main() {
 
         cout << "Please enter your longitude:\n";
         cin >> longitude;
+
+        for (Restaurant& res : restaurant_data) {
+            res.calculateDistance(latitude, longitude);
+        }
     }
 
     cout << "Sorting by " << category << "!\n\n";
@@ -118,8 +122,11 @@ int main() {
     else if (answer == 2) {
         cout << "Calling merge sort\n";
         if (category == "name"){
-            mergeSort(restaurant_data, 0, restaurant_data.size() - 1); //replace later with merge sort algorithm}
-            cout << "Sort Finished!" << endl;
+            mergeSort(restaurant_data, 0, restaurant_data.size() - 1, "name"); //replace later with merge sort algorithm}
+        } else if (category == "rating") {
+            mergeSort(restaurant_data, 0, restaurant_data.size() - 1, "rating"); //replace later with merge sort algorithm}
+        } else if (category == "distance") {
+            mergeSort(restaurant_data, 0, restaurant_data.size() - 1, "distance"); //replace later with merge sort algorithm}
         }
     }
 
