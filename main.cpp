@@ -4,7 +4,7 @@
 #include <sstream>
 #include "Restaurant.h"
 #include "sort_merge.h"
-//#include "sort_heap.h"
+#include "sort_heap.h"
 
 using namespace std;
 
@@ -123,7 +123,14 @@ int main() {
     cin >> answer;
 
     if (answer == 1) {
-        cout << "Calling heap sort\n"; //replace later with heap sort algorithm
+        cout << "Calling heap sort\n";
+        if (category == "name"){
+            heapSort(restaurant_data, restaurant_data.size() - 1, "name");
+        } else if (category == "rating") {
+            heapSort(restaurant_data, restaurant_data.size() - 1, "rating");
+        } else if (category == "distance") {
+            heapSort(restaurant_data, restaurant_data.size() - 1, "distance");
+        }
     }
     else if (answer == 2) {
         cout << "Calling merge sort\n";
