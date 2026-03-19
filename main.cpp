@@ -2,28 +2,13 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
+#include "Restaurant.h"
+#include "sort_merge.h"
+//#include "sort_heap.h"
 
 using namespace std;
 
-// create restaurant struct to read in csv file data
-struct Restaurant {
-    string title;
-    string category;
-    float rating;
-    string address;
-    float latitude;
-    float longitude;
-    float distance = -1.0;
 
-    void display() {
-        cout << "Title: " << title << endl;
-        cout << "Category: " << category << endl;
-        cout << "Rating: " << rating << endl;
-        cout << "Address: " << address << endl;
-        cout << "Latitude: " << latitude << endl;
-        cout << "Longitude: " << longitude << endl;
-    }
-};
 
 vector<Restaurant> load_file(string file_name) {
     vector<Restaurant> restaurants;
@@ -131,7 +116,17 @@ int main() {
         cout << "Calling heap sort\n"; //replace later with heap sort algorithm
     }
     else if (answer == 2) {
-        cout << "Calling merge sort\n"; //replace later with merge sort algorithm
+        cout << "Calling merge sort\n";
+        if (category == "name"){
+            mergeSort(restaurant_data, 0, restaurant_data.size() - 1); //replace later with merge sort algorithm}
+            cout << "Sort Finished!" << endl;
+        }
+    }
+
+
+    for (int i = 0; i < 5; i++) {
+        restaurant_data [i].display();
+        cout << endl;
     }
 
     return 0;
