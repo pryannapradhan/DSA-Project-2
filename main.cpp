@@ -163,11 +163,30 @@ int main() {
         auto start = chrono::high_resolution_clock::now();
 
         if (category == "name"){
-            heapSort(restaurant_data, restaurant_data.size() - 1, "name");
-        } else if (category == "rating") {
-            heapSort(restaurant_data, restaurant_data.size() - 1, "rating");
-        } else if (category == "distance") {
             heapSort(restaurant_data, restaurant_data.size() - 1, "distance");
+            for (int i = 0; i < numRecs; i++) {
+                sortedByDistance.push_back(restaurant_data[i]);
+            }
+            heapSort(sortedByDistance, sortedByDistance.size() - 1, "name");
+        }
+        else if (category == "rating") {
+            heapSort(restaurant_data, restaurant_data.size() - 1, "distance");
+            for (int i = 0; i < numRecs; i++) {
+                sortedByDistance.push_back(restaurant_data[i]);
+            }
+            heapSort(sortedByDistance, sortedByDistance.size() - 1, "rating");
+        } else if (category == "genre") {
+            if (genreMatches.size() >= numRecs) {
+                heapSort(genreMatches, genreMatches.size() - 1, "distance");
+            } else if (genreMatches.size() < numRecs) {
+                int diff = numRecs - genreMatches.size();
+                heapSort(genreMatches, genreMatches.size() - 1, "distance");
+                heapSort(restaurant_data, restaurant_data.size() - 1, "distance");
+                for (int i = 0; i < diff; i++) {
+                    genreMatches.push_back(restaurant_data[i]);
+                }
+
+            }
         }
 
         auto stop = chrono::high_resolution_clock::now();
