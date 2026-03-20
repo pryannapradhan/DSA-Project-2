@@ -83,10 +83,9 @@ int main() {
         vector<Restaurant> restaurant_data = load_file("150K_Restaurants_Cleaned.csv");
 
     cout << "Here is a the format of the data:\n";
-    for (int i = 0; i < 3; i++) {
-        restaurant_data [i].display();
-        cout << endl;
-    }
+    restaurant_data [0].display();
+    cout << endl;
+
 
     cout << "Please enter your latitude:\n";
     cin >> latitude;
@@ -98,7 +97,7 @@ int main() {
         res.calculateDistance(latitude, longitude);
     }
 
-    cout << "\nHow many restaurants do you want recommended? Please enter a number.\n";
+    cout << "How many restaurants do you want recommended? Please enter a number.\n";
 
     cin >> numRecs;
 
