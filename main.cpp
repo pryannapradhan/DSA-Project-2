@@ -6,6 +6,7 @@
 #include "Restaurant.h"
 #include "sort_merge.h"
 #include "sort_heap.h"
+#include <chrono>
 
 using namespace std;
 
@@ -60,7 +61,7 @@ int main() {
     string genre;
     vector<Restaurant> genreMatches;
     int numRecs;
-
+    float time_duration;
 
     cout << "-----------------------\n";
     cout << "     ARE U HUNGRY?     \n";
@@ -149,8 +150,6 @@ int main() {
     cout << "Sorting by " << category << "!\n\n";
 
 
-
-
     cout << "Which algorithm would you like to sort by? Please enter 1 or 2.\n";
     cout << "1. Heap Sort\n";
     cout << "2. Merge Sort\n";
@@ -160,6 +159,9 @@ int main() {
 
     if (answer == 1) {
         cout << "Calling heap sort\n";
+
+        auto start = chrono::high_resolution_clock::now();
+
         if (category == "name"){
             heapSort(restaurant_data, restaurant_data.size() - 1, "name");
         } else if (category == "rating") {
@@ -167,12 +169,19 @@ int main() {
         } else if (category == "distance") {
             heapSort(restaurant_data, restaurant_data.size() - 1, "distance");
         }
+
+        auto stop = chrono::high_resolution_clock::now();
+        chrono::duration<float, std::micro> duration_micros = stop - start;
+        time_duration = duration_micros.count();
     }
+
     else if (answer == 2) {
         cout << "Calling merge sort\n";
         //Name and Rating get sorted based on distance first, then on name and rating so that way it will perserve
-        if (category == "name"){
 
+        auto start = chrono::high_resolution_clock::now();
+
+        if (category == "name"){
             mergeSort(restaurant_data, 0, restaurant_data.size() - 1, "distance");
             for (int i = 0; i < numRecs; i++) {
                 sortedByDistance.push_back(restaurant_data[i]);
@@ -198,7 +207,12 @@ int main() {
 
             }
         }
+        auto stop = chrono::high_resolution_clock::now();
+        chrono::duration<float, std::micro> duration_micros = stop - start;
+        time_duration = duration_micros.count();
     }
+
+
     if (category == "type") {
         for (int i = 0; i < numRecs; i++) {
             genreMatches[i].display();
@@ -213,5 +227,6 @@ int main() {
         }
     }
 
+    cout << "Sorting time completed in: " << time_duration << "microseconds" << endl;
     return 0;
 }
