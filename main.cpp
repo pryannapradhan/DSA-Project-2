@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cctype>
 #include <vector>
 #include <fstream>
 #include <sstream>
@@ -54,9 +55,12 @@ vector<Restaurant> load_file(string file_name) {
 int main() {
     int answer;
     string category;
-    int numRecs;
     float latitude;
     float longitude;
+    string genre;
+    vector<Restaurant> genreMatches;
+    int numRecs;
+
 
     cout << "-----------------------\n";
     cout << "     ARE U HUNGRY?     \n";
@@ -84,36 +88,68 @@ int main() {
         cout << endl;
     }
 
+    cout << "Please enter your latitude:\n";
+    cin >> latitude;
+
+    cout << "Please enter your longitude:\n";
+    cin >> longitude;
+
+    for (Restaurant& res : restaurant_data) {
+        res.calculateDistance(latitude, longitude);
+    }
+
+    cout << "\nHow many restaurants do you want recommended? Please enter a number.\n";
+
+    cin >> numRecs;
+
     cout << "\nWhat category would you like to sort by? Please enter a number 1-3.\n";
     cout << "1. Restaurant Name\n";
     cout << "2. Rating\n";
-    cout << "3. Distance\n";
+    cout << "3. Type\n";
 
     cin >> answer;
 
     if (answer == 1) {
         category = "name";
     }
-    else if (answer == 2) category = "rating";
+    else if (answer == 2) {
+        category = "rating";
+    }
     else if (answer == 3) {
-        category = "distance";
+        category = "type";
+        cout << "Please enter the type of restaurant:\n";
+        cin >> genre;
 
-        cout << "Please enter your latitude:\n";
-        cin >> latitude;
+        string cleanedGenre = "";
 
-        cout << "Please enter your longitude:\n";
-        cin >> longitude;
-
-        for (Restaurant& res : restaurant_data) {
-            res.calculateDistance(latitude, longitude);
+        for (char c : genre) {
+            char lower = tolower(c);
+            cleanedGenre += lower;
         }
+        for (Restaurant& res : restaurant_data) {
+            string cleanedCategory = "";
+
+            for (char c : res.category) {
+                char lower = tolower(c);
+                cleanedCategory += lower;
+            }
+
+            if (cleanedCategory.find(cleanedGenre) != string::npos) {
+                genreMatches.push_back(res);
+            }
+        }
+
+        if (genreMatches.size() == 0) {
+            cout << "Our apologies, but we could not find any restaraunts with that category. We will return the closest " << numRecs << " restaurants to you instead." << endl;
+        } else if (genreMatches.size() < numRecs) {
+            cout << "We could only find " << genreMatches.size() << " restaurants in that category. We will display those, then give you the " << numRecs - genreMatches.size() << " restaurants closest to you." << endl;
+        }
+
     }
 
     cout << "Sorting by " << category << "!\n\n";
 
-    cout << "\nHow many restaurants do you want recommended? Please enter a number.\n";
 
-    cin >> numRecs;
 
 
     cout << "Which algorithm would you like to sort by? Please enter 1 or 2.\n";
@@ -121,6 +157,7 @@ int main() {
     cout << "2. Merge Sort\n";
 
     cin >> answer;
+    vector<Restaurant> sortedByDistance;
 
     if (answer == 1) {
         cout << "Calling heap sort\n";
@@ -134,19 +171,47 @@ int main() {
     }
     else if (answer == 2) {
         cout << "Calling merge sort\n";
+        //Name and Rating get sorted based on distance first, then on name and rating so that way it will perserve
         if (category == "name"){
-            mergeSort(restaurant_data, 0, restaurant_data.size() - 1, "name");
-        } else if (category == "rating") {
-            mergeSort(restaurant_data, 0, restaurant_data.size() - 1, "rating");
-        } else if (category == "distance") {
+
             mergeSort(restaurant_data, 0, restaurant_data.size() - 1, "distance");
+            for (int i = 0; i < numRecs; i++) {
+                sortedByDistance.push_back(restaurant_data[i]);
+            }
+            mergeSort(sortedByDistance, 0, sortedByDistance.size() - 1, "name");
+        }
+        else if (category == "rating") {
+            mergeSort(restaurant_data, 0, restaurant_data.size() - 1, "distance");
+            for (int i = 0; i < numRecs; i++) {
+                sortedByDistance.push_back(restaurant_data[i]);
+            }
+            mergeSort(sortedByDistance, 0, sortedByDistance.size() - 1, "rating");
+        } else if (category == "genre") {
+            if (genreMatches.size() >= numRecs) {
+                mergeSort(genreMatches, 0, genreMatches.size() - 1, "distance");
+            } else if (genreMatches.size() < numRecs) {
+                int diff = numRecs - genreMatches.size();
+                mergeSort(genreMatches, 0, genreMatches.size() - 1, "distance");
+                mergeSort(restaurant_data, 0, restaurant_data.size() - 1, "distance");
+                for (int i = 0; i < diff; i++) {
+                    genreMatches.push_back(restaurant_data[i]);
+                }
+
+            }
+        }
+    }
+    if (category == "type") {
+        for (int i = 0; i < numRecs; i++) {
+            genreMatches[i].display();
+            cout << endl;
         }
     }
 
-
-    for (int i = 0; i < numRecs; i++) {
-        restaurant_data [i].display();
-        cout << endl;
+    if (category == "name" || category == "rating") {
+        for (int i = 0; i < numRecs; i++) {
+            sortedByDistance[i].display();
+            cout << endl;
+        }
     }
 
     return 0;

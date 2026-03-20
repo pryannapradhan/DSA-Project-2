@@ -71,6 +71,8 @@ void merge(vector<Restaurant>& res, int left, int mid, int right, string type) {
             }
             k++;
         }
+    } else if (type == "type") {
+
     }
 
     //Inputs leftover values into the sorted vector.
