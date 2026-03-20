@@ -171,8 +171,8 @@ int main() {
         }
 
         auto stop = chrono::high_resolution_clock::now();
-        chrono::duration<float, std::micro> duration_micros = stop - start;
-        time_duration = duration_micros.count();
+        chrono::duration<float> duration_secs = stop - start;
+        time_duration = duration_secs.count();
     }
 
     else if (answer == 2) {
@@ -208,8 +208,8 @@ int main() {
             }
         }
         auto stop = chrono::high_resolution_clock::now();
-        chrono::duration<float, std::micro> duration_micros = stop - start;
-        time_duration = duration_micros.count();
+        chrono::duration<float> duration_secs = stop - start;
+        time_duration = duration_secs.count();
     }
 
 
@@ -227,6 +227,6 @@ int main() {
         }
     }
 
-    cout << "Sorting time completed in: " << time_duration << "microseconds" << endl;
+    cout << "Sorting time completed in: " << time_duration << " seconds" << endl;
     return 0;
 }
