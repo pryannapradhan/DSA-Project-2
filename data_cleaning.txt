@@ -1,3 +1,11 @@
+Below is the python code we used to clean the data.
+Operations:
+    - filter columns to cols of interest
+    - remove duplicate rows
+    - remove rows with na values, titles with special characters
+    - changed data types
+    - took random sample of 150K instances
+
 import pandas as pd
 
 # load dataset
@@ -9,8 +17,14 @@ important_cols = ['Title', 'Category', 'Rating', 'Address', 'Latitude', 'Longitu
 # filter original data frame
 df_filtered = df[important_cols]
 
+# remove duplicate rows
+df_filtered = df_filtered.drop_duplicates()
+
 # drop instances with null values
-df_filtered_no_null = df_filtered.dropna()
+df_filtered_no_null = df_filtered.dropna().copy()
+
+# remove rows that don't start with a letter
+df_filtered_no_null = df_filtered_no_null[df_filtered_no_null['Title'].str.contains(r"^[a-zA-Z0-9 '&+]+$")]
 
 # convert cols from object -> float
 df_filtered_no_null = df_filtered_no_null[df_filtered_no_null['Rating'] != 'Rating']
@@ -22,7 +36,8 @@ df_filtered_no_null['Latitude'] = df_filtered_no_null['Latitude'].astype(float)
 df_filtered_no_null = df_filtered_no_null[df_filtered_no_null['Longitude'] != 'Longitude']
 df_filtered_no_null['Longitude'] = df_filtered_no_null['Longitude'].astype(float)
 
-# sample only 100,000 points
+
+# sample only 150,000 points
 df_filtered_no_null_sample = df_filtered_no_null.sample(n=150000, random_state=123)
 
 # basic check
