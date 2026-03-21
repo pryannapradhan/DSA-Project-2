@@ -1,3 +1,6 @@
+// Author: Karen Liang, Pryanna Pradhan, Jasmine Escandor
+// Date: 3.18.2026
+
 #include <iostream>
 #include <cctype>
 #include <vector>
@@ -6,10 +9,7 @@
 #include "Restaurant.h"
 #include "sort_merge.h"
 #include "sort_heap.h"
-
 using namespace std;
-
-
 
 vector<Restaurant> load_file(string file_name) {
     vector<Restaurant> restaurants;
@@ -61,7 +61,7 @@ int main() {
     vector<Restaurant> genreMatches;
     int numRecs;
 
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     cout << "-----------------------\n";
     cout << "     ARE U HUNGRY?     \n";
     cout << "-----------------------\n";
@@ -88,20 +88,26 @@ int main() {
         cout << endl;
     }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     cout << "Please enter your latitude:\n";
     cin >> latitude;
 
     cout << "Please enter your longitude:\n";
     cin >> longitude;
 
+    // Caclulates the distance attribute for every restaurant in res vector.
     for (Restaurant& res : restaurant_data) {
         res.calculateDistance(latitude, longitude);
     }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     cout << "\nHow many restaurants do you want recommended? Please enter a number.\n";
 
     cin >> numRecs;
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     cout << "\nWhat category would you like to sort by? Please enter a number 1-3.\n";
     cout << "1. Restaurant Name\n";
     cout << "2. Rating\n";
@@ -121,11 +127,14 @@ int main() {
         cin >> genre;
 
         string cleanedGenre = "";
-
+        // Normalizes the genre input so it can be compared to the restaurant's category.
         for (char c : genre) {
             char lower = tolower(c);
             cleanedGenre += lower;
         }
+
+        // For each restaurant in res, cleans the category associated with it, and then checks if the user input is in
+        // the restaurant's category. If it is, gets added to a genreMatches  vector.
         for (Restaurant& res : restaurant_data) {
             string cleanedCategory = "";
 
@@ -139,8 +148,12 @@ int main() {
             }
         }
 
+        // If no restaraunts are found with that category, will return numRecs restaurants sorted by distance.
         if (genreMatches.size() == 0) {
-            cout << "Our apologies, but we could not find any restaraunts with that category. We will return the closest " << numRecs << " restaurants to you instead." << endl;
+            cout << "Our apologies, but we could not find any restaurants with that category. We will return the closest " << numRecs << " restaurants to you instead." << endl;
+
+        // If genreMatches has fewer restaurants than numRecs, will return all genre matches, and then restaurants sorted
+        // by distance.
         } else if (genreMatches.size() < numRecs) {
             cout << "We could only find " << genreMatches.size() << " restaurants in that category. We will display those, then give you the " << numRecs - genreMatches.size() << " restaurants closest to you." << endl;
         }
@@ -149,8 +162,7 @@ int main() {
 
     cout << "Sorting by " << category << "!\n\n";
 
-
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     cout << "Which algorithm would you like to sort by? Please enter 1 or 2.\n";
     cout << "1. Heap Sort\n";
@@ -171,9 +183,9 @@ int main() {
     }
     else if (answer == 2) {
         cout << "Calling merge sort\n";
-        //Name and Rating get sorted based on distance first, then on name and rating so that way it will perserve
+        // Name and Rating get sorted based on distance first, then on name and rating so that way it will return the
+        // numRecs number of closest restaurants based on name or rating.
         if (category == "name"){
-
             mergeSort(restaurant_data, 0, restaurant_data.size() - 1, "distance");
             for (int i = 0; i < numRecs; i++) {
                 sortedByDistance.push_back(restaurant_data[i]);
@@ -186,6 +198,9 @@ int main() {
                 sortedByDistance.push_back(restaurant_data[i]);
             }
             mergeSort(sortedByDistance, 0, sortedByDistance.size() - 1, "rating");
+        // For genre, have to check the size. If genreMatches is greater than or equal to numRecs, then sort the
+        // entire vector. If not, then must sort all restauants by distance, and add numRecs - genreMatches.size()
+        // number of restaurants to the genreMatches vector.
         } else if (category == "genre") {
             if (genreMatches.size() >= numRecs) {
                 mergeSort(genreMatches, 0, genreMatches.size() - 1, "distance");
@@ -200,6 +215,8 @@ int main() {
             }
         }
     }
+
+    // Will print out numRecs restaurants from genreMatches vector.
     if (category == "type") {
         for (int i = 0; i < numRecs; i++) {
             genreMatches[i].display();
@@ -207,6 +224,7 @@ int main() {
         }
     }
 
+    // Will print out numRecs restaurants from sortedByDistance vector.
     if (category == "name" || category == "rating") {
         for (int i = 0; i < numRecs; i++) {
             sortedByDistance[i].display();

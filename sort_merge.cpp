@@ -1,29 +1,21 @@
+// Author: Pryanna Pradhan
+// Date: 3.18.2026
+
 #include <iostream>
 #include <vector>
 #include "sort_merge.h"
 using namespace std;
 
-
-//
-// Author: Pryanna Pradhan
-// Date: 3.18.2026
-//
-
-
-
+// Takes parameters with restaurants vector, first index, middle index, right index, and the type to sort by.
 void merge(vector<Restaurant>& res, int left, int mid, int right, string type) {
-    bool name = false;
-    bool rating = false;
-    bool distance = false;
 
-
+    // Creates vectors that store the left side of the vector and the right side.
     vector<Restaurant> leftArr = {};
     vector<Restaurant> rightArr = {};
 
     int sizeL = mid - left + 1;
     int sizeR = right - mid;
 
-    //Creates vectors that store the left side of the vector and the right side.
     for (int i = 0; i < sizeL; i++) {
         leftArr.push_back(res[left + i]);
     }
@@ -32,13 +24,13 @@ void merge(vector<Restaurant>& res, int left, int mid, int right, string type) {
         rightArr.push_back(res[mid + 1 + i]);
     }
 
+    // Establishes indicies for rightArr and leftArr, so we can move through and place sorted values in the res vector.
     int i = 0;
     int j = 0;
     int k = left;
 
-
     if (type == "name") {
-        //Inserts the entries from each left and right vector based on alphabetical order.
+        // Inserts the entries from each left and right vector based on alphabetical order.
         while (i < sizeL && j < sizeR) {
             if (leftArr[i].title <= rightArr[j].title) {
                 res[k] = leftArr[i];
@@ -49,6 +41,8 @@ void merge(vector<Restaurant>& res, int left, int mid, int right, string type) {
             }
             k++;
         }
+
+        // Inserts the entries from each left and right vector based on rating (numerical) order.
     } else if (type == "rating") {
         while (i < sizeL && j < sizeR) {
             if (leftArr[i].rating >= rightArr[j].rating) {
@@ -60,6 +54,8 @@ void merge(vector<Restaurant>& res, int left, int mid, int right, string type) {
             }
             k++;
         }
+
+        // Inserts the entries from each left and right vector based on calculated distance (closest is first).
     } else if (type == "distance") {
         while (i < sizeL && j < sizeR) {
             if (leftArr[i].distance <= rightArr[j].distance) {
@@ -71,11 +67,9 @@ void merge(vector<Restaurant>& res, int left, int mid, int right, string type) {
             }
             k++;
         }
-    } else if (type == "type") {
-
     }
 
-    //Inputs leftover values into the sorted vector.
+    // Inputs leftover values into the sorted vector.
     if (i != sizeL) {
         while (i < sizeL) {
             res[k] = leftArr[i];
@@ -90,24 +84,20 @@ void merge(vector<Restaurant>& res, int left, int mid, int right, string type) {
             k++;
         }
     }
+}
 
-    }
-
-
+// Takes parameters with restaurants vector, first index, right index, and the type to sort by.
 void mergeSort(vector<Restaurant>& res, int left, int right, string type) {
 
-    //Splits the vector up recursively.
-
+    // Divides the vector recursively in half until only one value is inside vector.
+    // Then calls merge, which takes two portions and combines them in the sorted way.
     if (left < right) {
-
         int mid = left + (right - left) / 2;
 
         mergeSort(res, left, mid, type);
         mergeSort(res, mid + 1, right, type);
 
         merge(res, left, mid, right, type);
-
-
     }
 }
 

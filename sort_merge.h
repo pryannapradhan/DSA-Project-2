@@ -1,11 +1,11 @@
-//
-// Created by pryan on 3/18/2026.
-//
+// Author: Pryanna Pradhan
+// Date: 3.18.2026
+
+#include <vector>
+#include "Restaurant.h"
 
 #ifndef SORT_MERGE_H
 #define SORT_MERGE_H
-#include <vector>
-#include "Restaurant.h"
 
 void merge(vector<Restaurant>& res, int left, int mid, int right, string type);
 void mergeSort(vector<Restaurant>& res, int left, int right, string type);
