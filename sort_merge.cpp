@@ -42,7 +42,7 @@ void merge(vector<Restaurant>& res, int left, int mid, int right, string type) {
             k++;
         }
 
-        // Inserts the entries from each left and right vector based on rating (numerical) order.
+    // Inserts the entries from each left and right vector based on rating (numerical) order.
     } else if (type == "rating") {
         while (i < sizeL && j < sizeR) {
             if (leftArr[i].rating >= rightArr[j].rating) {
@@ -55,7 +55,7 @@ void merge(vector<Restaurant>& res, int left, int mid, int right, string type) {
             k++;
         }
 
-        // Inserts the entries from each left and right vector based on calculated distance (closest is first).
+    // Inserts the entries from each left and right vector based on calculated distance (closest is first).
     } else if (type == "distance") {
         while (i < sizeL && j < sizeR) {
             if (leftArr[i].distance <= rightArr[j].distance) {

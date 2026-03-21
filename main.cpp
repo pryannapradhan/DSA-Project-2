@@ -1,3 +1,6 @@
+// Author: Karen Liang, Pryanna Pradhan, Jasmine Escandor
+// Date: 3.18.2026
+
 #include <iostream>
 #include <cctype>
 #include <vector>
@@ -122,10 +125,14 @@ int main() {
 
         string cleanedGenre = "";
 
+        // Changes the input into all lowercase to make it uniform.
         for (char c : genre) {
             char lower = tolower(c);
             cleanedGenre += lower;
         }
+
+        // Makes each restaurants category uniform, then checks if user input is within the category.
+        // Then adds the restaurant, if the input is within the category, to genre matches.
         for (Restaurant& res : restaurant_data) {
             string cleanedCategory = "";
 
@@ -139,8 +146,10 @@ int main() {
             }
         }
 
+        // If genreMatches is empty, will return numRes restaurants closest to the user.
         if (genreMatches.size() == 0) {
             cout << "Our apologies, but we could not find any restaraunts with that category. We will return the closest " << numRecs << " restaurants to you instead." << endl;
+        // If genreMatches is less thn numRes, then will return all of genreMatches, plus numRecs - genreMatches.size restaurants sorted by that distance.
         } else if (genreMatches.size() < numRecs) {
             cout << "We could only find " << genreMatches.size() << " restaurants in that category. We will display those, then give you the " << numRecs - genreMatches.size() << " restaurants closest to you." << endl;
         }
@@ -196,10 +205,10 @@ int main() {
 
     else if (answer == 2) {
         cout << "Calling merge sort\n";
-        //Name and Rating get sorted based on distance first, then on name and rating so that way it will perserve
-
         auto start = chrono::high_resolution_clock::now();
 
+        // Name and Rating get sorted based on distance first, then on name or rating so that way it returns the
+        // numRecs closest restaurants sorted based on name or rating.
         if (category == "name"){
             mergeSort(restaurant_data, 0, restaurant_data.size() - 1, "distance");
             for (int i = 0; i < numRecs; i++) {
@@ -213,6 +222,8 @@ int main() {
                 sortedByDistance.push_back(restaurant_data[i]);
             }
             mergeSort(sortedByDistance, 0, sortedByDistance.size() - 1, "rating");
+        // If genreMatches is greater than or equal to numRecs, then it will sort based on genreMatches and return the numRecs.
+        // If genreMatches is smaller, then sort res based on distance and add numRecs - genreMatches.size() restaurants to genreMatches.
         } else if (category == "genre") {
             if (genreMatches.size() >= numRecs) {
                 mergeSort(genreMatches, 0, genreMatches.size() - 1, "distance");
@@ -231,7 +242,7 @@ int main() {
         time_duration = duration_secs.count();
     }
 
-
+    // If sorting by type, print the genreMatches vector.
     if (category == "type") {
         for (int i = 0; i < numRecs; i++) {
             genreMatches[i].display();
@@ -239,6 +250,7 @@ int main() {
         }
     }
 
+    // If sorting by name or rating, print the sortedByDistance vector.
     if (category == "name" || category == "rating") {
         for (int i = 0; i < numRecs; i++) {
             sortedByDistance[i].display();
