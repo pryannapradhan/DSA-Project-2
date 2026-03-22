@@ -62,6 +62,7 @@ int main() {
     float latitude;
     float longitude;
     string genre;
+    int proximity;
     vector<Restaurant> genreMatches;
     int numRecs;
     float time_duration;
@@ -123,6 +124,9 @@ int main() {
         cout << "Please enter the type of restaurant:\n";
         cin >> genre;
 
+        cout << "How close do you want these restaurants to be (in miles!)?\n";
+        cin >> proximity;
+
         string cleanedGenre = "";
 
         // Changes the input into all lowercase to make it uniform.
@@ -131,6 +135,8 @@ int main() {
             cleanedGenre += lower;
         }
 
+        // Empties genreMatches for multiple runs.
+        genreMatches.clear();
         // Makes each restaurants category uniform, then checks if user input is within the category.
         // Then adds the restaurant, if the input is within the category, to genre matches.
         for (Restaurant& res : restaurant_data) {
@@ -141,18 +147,20 @@ int main() {
                 cleanedCategory += lower;
             }
 
-            if (cleanedCategory.find(cleanedGenre) != string::npos) {
+            if (cleanedCategory.find(cleanedGenre) != string::npos && res.distance <= proximity) {
                 genreMatches.push_back(res);
             }
         }
 
         // If genreMatches is empty, will return numRes restaurants closest to the user.
         if (genreMatches.size() == 0) {
-            cout << "Our apologies, but we could not find any restaraunts with that category. We will return the closest " << numRecs << " restaurants to you instead." << endl;
+            cout << "Our apologies, but we could not find any restaurants with that category " << proximity << " miles away. We will return the closest " << numRecs << " restaurants to you instead." << endl;
         // If genreMatches is less thn numRes, then will return all of genreMatches, plus numRecs - genreMatches.size restaurants sorted by that distance.
         } else if (genreMatches.size() < numRecs) {
-            cout << "We could only find " << genreMatches.size() << " restaurants in that category. We will display those, then give you the " << numRecs - genreMatches.size() << " restaurants closest to you." << endl;
+            cout << "We could only find " << genreMatches.size() << " restaurants in that category " << proximity << " miles away. We will display those, then give you the " << numRecs - genreMatches.size() << " restaurants closest to you." << endl;
         }
+
+        cout << "size: " << genreMatches.size() << endl;
 
     }
 
@@ -184,7 +192,7 @@ int main() {
                 sortedByDistance.push_back(restaurant_data[i]);
             }
             heapSort(sortedByDistance, sortedByDistance.size() - 1, "rating");
-        } else if (category == "genre") {
+        } else if (category == "type") {
             if (genreMatches.size() >= numRecs) {
                 heapSort(genreMatches, genreMatches.size() - 1, "distance");
             } else if (genreMatches.size() < numRecs) {
@@ -224,15 +232,28 @@ int main() {
             mergeSort(sortedByDistance, 0, sortedByDistance.size() - 1, "rating");
         // If genreMatches is greater than or equal to numRecs, then it will sort based on genreMatches and return the numRecs.
         // If genreMatches is smaller, then sort res based on distance and add numRecs - genreMatches.size() restaurants to genreMatches.
-        } else if (category == "genre") {
+        } else if (category == "type") {
             if (genreMatches.size() >= numRecs) {
                 mergeSort(genreMatches, 0, genreMatches.size() - 1, "distance");
+
+            } else if (genreMatches.size() == 0){
+                mergeSort(restaurant_data, 0, restaurant_data.size() - 1, "distance");
             } else if (genreMatches.size() < numRecs) {
                 int diff = numRecs - genreMatches.size();
                 mergeSort(genreMatches, 0, genreMatches.size() - 1, "distance");
                 mergeSort(restaurant_data, 0, restaurant_data.size() - 1, "distance");
                 for (int i = 0; i < diff; i++) {
-                    genreMatches.push_back(restaurant_data[i]);
+                    bool added = false;
+                    for (Restaurant& match : genreMatches) {
+                        if (match.title == restaurant_data[i].title) {
+                            added = true;
+                            break;
+                        }
+                    }
+
+                    if (added == false) {
+                        genreMatches.push_back(restaurant_data[i]);
+                    }
                 }
 
             }
@@ -244,11 +265,19 @@ int main() {
 
     // If sorting by type, print the genreMatches vector.
     if (category == "type") {
-        for (int i = 0; i < numRecs; i++) {
-            genreMatches[i].display();
-            cout << endl;
+        if (genreMatches.size() != 0) {
+            for (int i = 0; i < numRecs; i++) {
+                genreMatches[i].display();
+                cout << endl;
+            }
+        } else {
+            for (int i = 0; i < numRecs; i++) {
+                restaurant_data[i].display();
+                cout << endl;
+            }
         }
     }
+
 
     // If sorting by name or rating, print the sortedByDistance vector.
     if (category == "name" || category == "rating") {

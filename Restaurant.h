@@ -35,7 +35,7 @@ struct Restaurant {
 
     // Function that uses Haversine formula to use coordinates to find the distance between two points.
     // Uses arctan(x) instead of arcsin(x) because it is safer for calculations.
-    // Updates the distance attribute of the object, else distance is negative.
+    // Updates the distance attribute of the object in miles, else distance is negative.
     void calculateDistance(float lat, float lon) {
         float latU = toRad(lat);
         float lonU = toRad(lon);
@@ -44,7 +44,7 @@ struct Restaurant {
         float latD = latR - latU;
         float lonD = lonR - lonU;
 
-        float factorOne = 2 * 6371.0;
+        float factorOne = 2 * 3959.0;
         float arg = pow(sin(latD / 2),  2) + (cos(latU) * cos(latR) * pow(sin(lonD / 2), 2));
         float factorTwo = atan2(sqrt(arg), sqrt(1 - arg));
 
