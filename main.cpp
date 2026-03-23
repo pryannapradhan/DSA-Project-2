@@ -102,15 +102,15 @@ int main() {
         res.calculateDistance(latitude, longitude);
     }
 
+    cout << "How many restaurants do you want recommended? Please enter a number.\n";
+
+    cin >> numRecs;
+
     bool continueSorting = true;
 
     while (continueSorting) {
         vector<Restaurant> restaurant_data = restaurant_file; // restore original vector of restaurants
         genreMatches.clear(); // Empties genreMatches for multiple runs
-
-        cout << "How many restaurants do you want recommended? Please enter a number.\n";
-
-        cin >> numRecs;
 
         cout << "\nWhat category would you like to sort by? Please enter a number 1-3.\n";
         cout << "1. Restaurant Name\n";
