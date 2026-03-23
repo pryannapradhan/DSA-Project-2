@@ -1,78 +1,94 @@
+// Author: Jasmine Escandor
+// Date: 3.19.2026
+
 #include "sort_heap.h"
 #include <iostream>
 #include <vector>
 #include <string>
 using namespace std;
 
-void heapifyMin(vector<Restaurant>& res, int i, int n, string type){
-    int smallest = i; // root is the smallest element in a min heap
-    
-    //define parent-child relationships
-    int left = 2 * i + 1;
-    int right = 2 * i + 2;
+void heapifyUp(vector<Restaurant>& res, int idx, string type){
+    int parent = (idx - 1) / 2; //define parent-child relationship
 
     //compare elements based on type of sorting
-    if (type == "name") {
-        if (left <= n && res[left].title < res[smallest].title) {
-            smallest = left;
+    while (idx > 0) {
+        bool willSwap = false;
+        if (type == "name") {
+            willSwap = res[idx].title < res[parent].title;
+        } 
+        else if(type == "rating") {
+            willSwap = res[idx].rating > res[parent].rating;
         }
-        if (right <= n && res[right].title < res[smallest].title) {
-            smallest = right;
+        else if (type == "distance") {
+            willSwap = res[idx].distance < res[parent].distance;
         }
-    } 
-    
-    else if (type == "distance") {
-        if (left <= n && res[left].distance < res[smallest].distance) {
-            smallest = left;
-        }
-        if (right <= n && res[right].distance < res[smallest].distance) {
-            smallest = right;
-        }
-    }
-    // if the smallest is not the root, swap and heapify
-    if (smallest != i) {
-        swap(res[i], res[smallest]);
-        heapifyMin(res, smallest, n, type);
+
+        // if the child is smaller than the parent, swap and heapify up
+        if (!willSwap) break;
+        swap(res[idx], res[parent]);
+        idx = parent;
+        parent = (idx - 1) / 2;
     }
 }
 
-void heapifyMax(vector<Restaurant>& res, int i, int n, string type){
-    int largest = i; // root is the largest element in a max heap
+void heapifyDown(vector<Restaurant>& res, int idx, int n, string type){
+    //define parent-child relationships
+    int parent = idx;
+    int left = 2 * idx + 1;
+    int right = 2 * idx + 2;
 
-    int left = 2 * i + 1;
-    int right = 2 * i + 2;
-
-    if (type == "rating") {
-        if (left <= n && res[left].rating > res[largest].rating) {
-            largest = left;
+    if (type == "name") {
+        if (left <= n && res[left].title < res[parent].title) {
+            parent = left;
         }
-        if (right <= n && res[right].rating > res[largest].rating) {
-            largest = right;
+        if (right <= n && res[right].title < res[parent].title) {
+            parent = right;
         }
     } 
+    else if(type == "rating") {
+        if (left <= n && res[left].rating > res[parent].rating) {
+            parent = left;
+        }
+        if (right <= n && res[right].rating > res[parent].rating) {
+            parent = right;
+        }
+    }
+    else if (type == "distance") {
+        if (left <= n && res[left].distance < res[parent].distance) {
+            parent = left;
+        }
+        if (right <= n && res[right].distance < res[parent].distance) {
+            parent = right;
+        }
+    }
     // if the largest is not the root, swap and heapify
-    if (largest != i){
-        swap(res[i], res[largest]);
-        heapifyMax(res, largest, n, type);
+    if (parent != idx){
+        swap(res[idx], res[parent]);
+        heapifyDown(res, parent, n, type);
+    }
+}
+
+void buildHeap(vector<Restaurant>& res, string type){
+    for (int i = 0; i < res.size() - 1; i++){
+        heapifyUp(res, i, type);
     }
 }
 
 void heapSort(vector<Restaurant>& res, int n, string type){
     // builds heap
-    for (int i = n / 2; i >= 0; i--) {
-        if (type == "rating") {
-            heapifyMax(res, i, n, type);
-        } else {
-            heapifyMin(res, i, n, type);
-        }
+    buildHeap(res, type);
+    
+    vector<Restaurant> sorted;
+    sorted.reserve(res.size()); // allocate memory
+
+    while (n >= 0){
+        sorted.push_back(res[0]);
+        swap(res[0], res[n]);
+        n--;
+        heapifyDown(res, 0, n, type);
     }
-    //rearranges heap
-    for (int i = n; i > 0; i--) {
-        swap(res[0], res[i]);
-        if (type == "rating") {
-            heapifyMax(res, i-1, n, type);
-        } else {
-            heapifyMin(res, i-1, n, type);
-        }
+
+    for (int i = 0; i < sorted.size(); i++) {
+        res[i] = sorted[i];
     }
 }
