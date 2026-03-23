@@ -189,6 +189,7 @@ int main() {
 
             auto start = chrono::high_resolution_clock::now();
 
+            // sort name and rating by distance first, then sort numRecs by name or rating
             if (category == "name"){
                 heapSort(restaurant_data, restaurant_data.size() - 1, "distance");
                 for (int i = 0; i < numRecs; i++) {
@@ -202,12 +203,18 @@ int main() {
                     sortedByDistance.push_back(restaurant_data[i]);
                 }
                 heapSort(sortedByDistance, sortedByDistance.size() - 1, "rating");
-            } else if (category == "type") {
+            } 
+            // If genreMatches is greater than or equal to numRecs, sort genreMatches based on distance
+            // If genreMatches is smaller than numRecs, add the closest restaurants to genreMatches
+            // If genreMatches is empty, sort restaurants based on distance
+            else if (category == "type") {
                 if (genreMatches.size() >= numRecs) {
                     heapSort(genreMatches, genreMatches.size() - 1, "distance");
-                } else if (genreMatches.size() == 0){
-                heapSort(restaurant_data, restaurant_data.size() - 1, "distance");
-                } else if (genreMatches.size() < numRecs) {
+                } 
+                else if (genreMatches.size() == 0){
+                    heapSort(restaurant_data, restaurant_data.size() - 1, "distance");
+                } 
+                else if (genreMatches.size() < numRecs) {
                     int diff = numRecs - genreMatches.size();
                     heapSort(genreMatches, genreMatches.size() - 1, "distance");
                     heapSort(restaurant_data, restaurant_data.size() - 1, "distance");
