@@ -205,12 +205,23 @@ int main() {
             } else if (category == "type") {
                 if (genreMatches.size() >= numRecs) {
                     heapSort(genreMatches, genreMatches.size() - 1, "distance");
+                } else if (genreMatches.size() == 0){
+                heapSort(restaurant_data, restaurant_data.size() - 1, "distance");
                 } else if (genreMatches.size() < numRecs) {
                     int diff = numRecs - genreMatches.size();
                     heapSort(genreMatches, genreMatches.size() - 1, "distance");
                     heapSort(restaurant_data, restaurant_data.size() - 1, "distance");
                     for (int i = 0; i < diff; i++) {
-                        genreMatches.push_back(restaurant_data[i]);
+                        bool added = false;
+                        for (Restaurant& match : genreMatches) {
+                            if (match.title == restaurant_data[i].title) {
+                                added = true;
+                                break;
+                            }
+                        }
+                        if (added == false) {
+                            genreMatches.push_back(restaurant_data[i]);
+                        }
                     }
 
                 }
