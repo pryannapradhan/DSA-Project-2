@@ -243,10 +243,9 @@ int main() {
                 // If genreMatches is smaller, then sort res based on distance and add numRecs - genreMatches.size() restaurants to genreMatches.
             } else if (category == "type") {
                 if (genreMatches.size() == 0) {
-                    mergeSort(genreMatches, 0, genreMatches.size() - 1, "distance");
-                } else if (genreMatches.size() >= numRecs || genreMatches.size() < numRecs) {
                     mergeSort(restaurant_data, 0, restaurant_data.size() - 1, "distance");
-                }
+                } else if (genreMatches.size() >= numRecs || genreMatches.size() < numRecs) {
+                    mergeSort(genreMatches, 0, genreMatches.size() - 1, "distance");                }
             }
             auto stop = chrono::high_resolution_clock::now();
             auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
@@ -301,6 +300,8 @@ int main() {
 
         cout << "Sorting time completed in: " << time_duration << " microseconds \n\n";
         cout << "Returning back to category selection... \n";
+
+        sortedByDistance.clear();
     }
 
     cout << "Thank you for trying out 'ARE U HUNGRY?' BYEEEEEE :)" << endl;
