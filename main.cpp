@@ -292,7 +292,7 @@ int main() {
         }
 
         // If sorting by type, print the genreMatches vector.
-        if (category == "type") {
+        /*if (category == "type") {
             if (genreMatches.size() != 0) {
                 for (int i = 0; i < numRecs; i++) {
                     genreMatches[i].display();
@@ -304,7 +304,26 @@ int main() {
                     cout << endl;
                 }
             }
+        }*/
+
+        if (category == "type") {
+            if (!genreMatches.empty()) {
+                // print number of restaurants user requests, if not enough, print what we have
+                int outputLimit = min(numRecs, (int)genreMatches.size());
+                for (int i = 0; i < outputLimit; i++) {
+                    genreMatches[i].display();
+                    cout << endl;
+                }
+            } else {
+                // if nothing matches type, print restaurants ordered by distance
+                int outputLimit = min(numRecs, (int)restaurant_data.size());
+                for (int i = 0; i < outputLimit; i++) {
+                    restaurant_data[i].display();
+                    cout << endl;
+                }
+            }
         }
+
 
 
         // If sorting by name or rating, print the sortedByDistance vector.
