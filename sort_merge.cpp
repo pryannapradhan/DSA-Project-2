@@ -1,5 +1,6 @@
 // Author: Pryanna Pradhan
 // Date: 3.18.2026
+// Resource: Module 8 Merge Sort Lecture
 
 #include <iostream>
 #include <vector>

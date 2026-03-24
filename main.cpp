@@ -163,14 +163,13 @@ int main() {
             }
 
             // If genreMatches is empty, will return numRes restaurants closest to the user.
-            if (genreMatches.size() == 0) {
-                cout << "Our apologies, but we could not find any restaurants with that category " << proximity << " miles away. We will return the closest " << numRecs << " restaurants to you instead." << endl;
-                // If genreMatches is less thn numRes, then will return all of genreMatches, plus numRecs - genreMatches.size restaurants sorted by that distance.
-            } else if (genreMatches.size() < numRecs) {
-                cout << "We could only find " << genreMatches.size() << " restaurants in that category " << proximity << " miles away. We will display those, then give you the " << numRecs - genreMatches.size() << " restaurants closest to you." << endl;
-            }
+            // if (genreMatches.size() == 0) {
+            //     cout << "Our apologies, but we could not find any restaurants with that category " << proximity << " miles away. We will return the closest " << numRecs << " restaurants to you instead." << endl;
+            //     // If genreMatches is less thn numRes, then will return all of genreMatches, plus numRecs - genreMatches.size restaurants sorted by that distance.
+            // } else if (genreMatches.size() < numRecs) {
+            //     cout << "We could only find " << genreMatches.size() << " restaurants in that category " << proximity << " miles away. We will display those, then give you the " << numRecs - genreMatches.size() << " restaurants closest to you." << endl;
+            // }
 
-            cout << "size: " << genreMatches.size() << endl;
 
         }
 
@@ -208,34 +207,16 @@ int main() {
             // If genreMatches is smaller than numRecs, add the closest restaurants to genreMatches
             // If genreMatches is empty, sort restaurants based on distance
             else if (category == "type") {
-                if (genreMatches.size() >= numRecs) {
-                    heapSort(genreMatches, genreMatches.size() - 1, "distance");
-                } 
-                else if (genreMatches.size() == 0){
+                if (genreMatches.size() == 0){
                     heapSort(restaurant_data, restaurant_data.size() - 1, "distance");
-                } 
-                else if (genreMatches.size() < numRecs) {
-                    int diff = numRecs - genreMatches.size();
+                } else if (genreMatches.size() >= numRecs || genreMatches.size() < numRecs) {
                     heapSort(genreMatches, genreMatches.size() - 1, "distance");
-                    heapSort(restaurant_data, restaurant_data.size() - 1, "distance");
-                    for (int i = 0; i < diff; i++) {
-                        bool added = false;
-                        for (Restaurant& match : genreMatches) {
-                            if (match.title == restaurant_data[i].title) {
-                                added = true;
-                                break;
-                            }
-                        }
-                        if (added == false) {
-                            genreMatches.push_back(restaurant_data[i]);
-                        }
-                    }
-
                 }
+
             }
 
             auto stop = chrono::high_resolution_clock::now();
-            auto duration = chrono::duration_cast<chrono::milliseconds>(stop - start);
+            auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
             time_duration = (float)duration.count();
         }
 
@@ -261,33 +242,14 @@ int main() {
                 // If genreMatches is greater than or equal to numRecs, then it will sort based on genreMatches and return the numRecs.
                 // If genreMatches is smaller, then sort res based on distance and add numRecs - genreMatches.size() restaurants to genreMatches.
             } else if (category == "type") {
-                if (genreMatches.size() >= numRecs) {
+                if (genreMatches.size() == 0) {
                     mergeSort(genreMatches, 0, genreMatches.size() - 1, "distance");
-
-                } else if (genreMatches.size() == 0){
+                } else if (genreMatches.size() >= numRecs || genreMatches.size() < numRecs) {
                     mergeSort(restaurant_data, 0, restaurant_data.size() - 1, "distance");
-                } else if (genreMatches.size() < numRecs) {
-                    int diff = numRecs - genreMatches.size();
-                    mergeSort(genreMatches, 0, genreMatches.size() - 1, "distance");
-                    mergeSort(restaurant_data, 0, restaurant_data.size() - 1, "distance");
-                    for (int i = 0; i < diff; i++) {
-                        bool added = false;
-                        for (Restaurant& match : genreMatches) {
-                            if (match.title == restaurant_data[i].title) {
-                                added = true;
-                                break;
-                            }
-                        }
-
-                        if (added == false) {
-                            genreMatches.push_back(restaurant_data[i]);
-                        }
-                    }
-
                 }
             }
             auto stop = chrono::high_resolution_clock::now();
-            auto duration = chrono::duration_cast<chrono::milliseconds>(stop - start);
+            auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
             time_duration = (float)duration.count();
         }
 
@@ -314,6 +276,7 @@ int main() {
                     genreMatches[i].display();
                     cout << endl;
                 }
+                cout << "Full genre matches" << endl;
             } else {
                 // if nothing matches type, print restaurants ordered by distance
                 int outputLimit = min(numRecs, (int)restaurant_data.size());
@@ -321,6 +284,8 @@ int main() {
                     restaurant_data[i].display();
                     cout << endl;
                 }
+                cout << "Our apologies, but we could not find any restaurants with that category " << proximity << " miles away. We returned the closest " << numRecs << " restaurants to you instead." << endl;
+
             }
         }
 
@@ -334,7 +299,7 @@ int main() {
             }
         }
 
-        cout << "Sorting time completed in: " << time_duration << " milliseconds \n\n";
+        cout << "Sorting time completed in: " << time_duration << " microseconds \n\n";
         cout << "Returning back to category selection... \n";
     }
 
