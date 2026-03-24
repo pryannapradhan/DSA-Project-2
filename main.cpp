@@ -275,7 +275,7 @@ int main() {
                     genreMatches[i].display();
                     cout << endl;
                 }
-                cout << "Full genre matches" << endl;
+                cout << "Matched " << outputLimit << " Restaurants" << endl;
             } else {
                 // if nothing matches type, print restaurants ordered by distance
                 int outputLimit = min(numRecs, (int)restaurant_data.size());
