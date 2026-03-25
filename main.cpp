@@ -88,7 +88,7 @@ int main() {
     cout << "Amazing, let us begin!\n\n";
 
     // Load in csv data
-        vector<Restaurant> restaurant_file = load_file("150K_Restaurants_Cleaned.csv");
+        vector<Restaurant> restaurant_file = load_file("Restaurants_Cleaned.csv");
 
     cout << "--------------------------------------------------------------------------------------------------------" << endl;
     cout << "Here is a the format of the data:\n";
