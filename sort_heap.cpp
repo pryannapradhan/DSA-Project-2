@@ -69,7 +69,7 @@ void heapifyDown(vector<Restaurant>& res, int idx, int n, string type){
 }
 
 void buildHeap(vector<Restaurant>& res, string type){
-    for (int i = 0; i < res.size() - 1; i++){
+    for (int i = 0; i <= res.size() - 1; i++){
         heapifyUp(res, i, type);
     }
 }
