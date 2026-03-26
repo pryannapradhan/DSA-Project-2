@@ -106,7 +106,7 @@ int main() {
         res.calculateDistance(latitude, longitude);
     }
 
-    cout << "How many restaurants do you want recommended? Please enter a number.\n";
+    cout << "How many restaurants do you want recommended? Please enter a number less than 130,000.\n";
     cin >> sNumRecs;
     bool isNum = true;
     for (char c : sNumRecs) {
@@ -194,7 +194,7 @@ int main() {
 
         cout << "Sorting by " << category << "!\n\n";
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         cout << "--------------------------------------------------------------------------------------------------------" << endl;
         cout << "Which algorithm would you like to sort by? Please enter 1 or 2.\n";
         cout << "1. Heap Sort\n";
@@ -208,74 +208,70 @@ int main() {
 
         if (answer == 1) {
             cout << "Calling heap sort!\n\n";
+            // sort Restaurant vector by distance first
+            heapSort(restaurant_data, restaurant_data.size() - 1, "distance");
 
-            auto start = chrono::high_resolution_clock::now();
-
-            // sort name and rating by distance first, then sort numRecs by name or rating
-            if (category == "name"){
-                heapSort(restaurant_data, restaurant_data.size() - 1, "distance");
-                for (int i = 0; i < numRecs; i++) {
-                    sortedByDistance.push_back(restaurant_data[i]);
-                }
-                heapSort(sortedByDistance, sortedByDistance.size() - 1, "name");
+            for (int i = 0; i < numRecs; i++) {
+                sortedByDistance.push_back(restaurant_data[i]);
             }
-            else if (category == "rating") {
-                heapSort(restaurant_data, restaurant_data.size() - 1, "distance");
-                for (int i = 0; i < numRecs; i++) {
-                    sortedByDistance.push_back(restaurant_data[i]);
+
+            if (category == "name" || category == "rating" || (category == "type" && !genreMatches.empty())){
+                // start the clock time
+                auto start = chrono::high_resolution_clock::now();
+
+                // sort numRecs by name or rating
+                if (category == "name"){
+                    heapSort(sortedByDistance, sortedByDistance.size() - 1, "name");
                 }
-                heapSort(sortedByDistance, sortedByDistance.size() - 1, "rating");
-            } 
-            // If genreMatches is greater than or equal to numRecs, sort genreMatches based on distance and return numRecs
-            // If genreMatches is smaller than numRecs, return all of genreMatches sorted.
-            // If genreMatches is empty, sort restaurants based on distance.
-            else if (category == "type") {
-                if (genreMatches.size() == 0){
-                    heapSort(restaurant_data, restaurant_data.size() - 1, "distance");
-                } else if (genreMatches.size() >= numRecs || genreMatches.size() < numRecs) {
+                else if (category == "rating") {
+                    heapSort(sortedByDistance, sortedByDistance.size() - 1, "rating");
+                }
+                // If genreMatches is greater than or equal to numRecs, sort genreMatches based on distance and return numRecs
+                // If genreMatches is smaller than numRecs, return all of genreMatches sorted.
+                else if (category == "type") {
                     heapSort(genreMatches, genreMatches.size() - 1, "distance");
                 }
+                auto stop = chrono::high_resolution_clock::now();
+                auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
+                time_duration = (float)duration.count();
             }
-            auto stop = chrono::high_resolution_clock::now();
-            auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
-            time_duration = (float)duration.count();
+            else {
+                time_duration = 0.0; // if no type matched, just return portion of restaurant vector sorted by distance
+            }
         }
 
         else if (answer == 2) {
             cout << "Calling merge sort!\n\n";
-            auto start = chrono::high_resolution_clock::now();
-            // Name and Rating get sorted based on distance first, then on name or rating so that way it returns the
-            // numRecs closest restaurants sorted based on name or rating.
-            if (category == "name"){
-                mergeSort(restaurant_data, 0, restaurant_data.size() - 1, "distance");
-                for (int i = 0; i < numRecs; i++) {
-                    sortedByDistance.push_back(restaurant_data[i]);
-                }
-                mergeSort(sortedByDistance, 0, sortedByDistance.size() - 1, "name");
+
+            mergeSort(restaurant_data, 0, restaurant_data.size() - 1, "distance");
+            for (int i = 0; i < numRecs; i++) {
+                sortedByDistance.push_back(restaurant_data[i]);
             }
-            else if (category == "rating") {
-                mergeSort(restaurant_data, 0, restaurant_data.size() - 1, "distance");
-                for (int i = 0; i < numRecs; i++) {
-                    sortedByDistance.push_back(restaurant_data[i]);
+
+            if (category == "name" || category == "rating" || (category == "type" && !genreMatches.empty())) {
+                auto start = chrono::high_resolution_clock::now();
+                // numRecs closest restaurants sorted based on name or rating.
+                if (category == "name"){
+                    mergeSort(sortedByDistance, 0, sortedByDistance.size() - 1, "name");
                 }
-                mergeSort(sortedByDistance, 0, sortedByDistance.size() - 1, "rating");
-                // If genreMatches is greater than or equal to numRecs, then it will sort based on genreMatches and return the numRecs.
-                // If genreMatches is smaller, then sort res based on distance and add numRecs - genreMatches.size() restaurants to genreMatches.
-            } else if (category == "type") {
-                cout << "hello";
-                if (genreMatches.size() == 0) {
-                    cout << "I'm here" << endl;
-                    mergeSort(restaurant_data, 0, restaurant_data.size() - 1, "distance");
-                } else if (genreMatches.size() >= numRecs || genreMatches.size() < numRecs) {
+                else if (category == "rating") {
+                    mergeSort(sortedByDistance, 0, sortedByDistance.size() - 1, "rating");
+                    // If genreMatches is greater than or equal to numRecs, then it will sort based on genreMatches and return the numRecs.
+                    // If genreMatches is smaller, then sort res based on distance and add numRecs - genreMatches.size() restaurants to genreMatches.
+                }
+                else if (category == "type") {
                     mergeSort(genreMatches, 0, genreMatches.size() - 1, "distance");
                 }
+                auto stop = chrono::high_resolution_clock::now();
+                auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
+                time_duration = (float)duration.count();
             }
-            auto stop = chrono::high_resolution_clock::now();
-            auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
-            time_duration = (float)duration.count();
+            else {
+                time_duration = 0.0; // if no type matched, just return portion of restaurant vector sorted by distance
+            }
         }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         // Displaying the sorted vector.
         Restaurant topRec;
@@ -309,7 +305,8 @@ int main() {
                     cout << endl;
                 }
                 cout << "--------------------------------------------------------------------------------------------------------" << endl;
-                cout << "Our apologies, but we could not find any restaurants with that category " << proximity << " miles away. We returned the closest " << numRecs << " restaurants to you instead." << endl;
+                cout << "Our apologies, but we could not find any restaurants with that category within " << proximity << " miles away. We returned the closest " << numRecs << " restaurants to you instead." << endl;
+                cout << "\nNote: Because no restaurants matched your type and distance, the sorting time will be 0\n";
 
             }
         }
@@ -328,10 +325,9 @@ int main() {
         }
 
         cout << "Our top recommendation is " << topRec.title << "!\n";
-        cout << "Sorting time completed in: " << time_duration << " microseconds \n\n";
-        cout << "Returning back to category selection... \n";
+        cout << "\nSorting time completed in: " << time_duration << " microseconds \n";
+        cout << "\nReturning back to category selection... \n";
     }
-
     cout << "Thank you for trying out 'ARE U HUNGRY?' We hope you got some really good recommendations. BYEEEE :)" << endl;
     return 0;
 }
