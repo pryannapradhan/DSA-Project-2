@@ -288,7 +288,7 @@ int main() {
                 }
                 cout << "--------------------------------------------------------------------------------------------------------" << endl;
                 if (genreMatches.size() < numRecs) {
-                    cout << "We could not find " << numRecs << " " << genre << " restaurants. We returned all " << genreMatches.size() << " " << genre << "restaurants found instead." << endl;
+                    cout << "We could not find " << numRecs << " " << genre << " restaurants. We returned all " << genreMatches.size() << " " << genre << " restaurants found instead." << endl;
                 } else {
                     cout << "Returned " << numRecs << " " << genre << " restaurants, sorted by distance." << endl;
                 }
