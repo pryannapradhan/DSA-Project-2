@@ -98,7 +98,7 @@ void heapSort(vector<Restaurant>& res, int n, string type){
         heapifyDown(res, 0, n, type);
     }
 
-    //copy sorted vector back into res
+    //copy sorted vector back into res vector
     for (int i = 0; i < sorted.size(); i++) {
         res[i] = sorted[i];
     }
